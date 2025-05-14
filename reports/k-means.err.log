@@ -1,0 +1,85 @@
+Traceback (most recent call last):
+  File "/home/codespace/.python/current/lib/python3.12/site-packages/jupyter_cache/executors/utils.py", line 58, in single_nb_execution
+    executenb(
+  File "/home/codespace/.local/lib/python3.12/site-packages/nbclient/client.py", line 1314, in execute
+    return NotebookClient(nb=nb, resources=resources, km=km, **kwargs).execute()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/codespace/.local/lib/python3.12/site-packages/jupyter_core/utils/__init__.py", line 165, in wrapped
+    return loop.run_until_complete(inner)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/codespace/.python/current/lib/python3.12/asyncio/base_events.py", line 684, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/home/codespace/.local/lib/python3.12/site-packages/nbclient/client.py", line 709, in async_execute
+    await self.async_execute_cell(
+  File "/home/codespace/.local/lib/python3.12/site-packages/nbclient/client.py", line 1062, in async_execute_cell
+    await self._check_raise_for_error(cell, cell_index, exec_reply)
+  File "/home/codespace/.local/lib/python3.12/site-packages/nbclient/client.py", line 918, in _check_raise_for_error
+    raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
+nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
+------------------
+from sklearn.cluster import KMeans
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import silhouette_score
+import matplotlib.pyplot as plt
+
+# Ambil fitur
+features = df[['sepal_length', 'sepal_width', 'petal_length', 'petal_width']]
+
+# Standarisasi
+scaler = StandardScaler()
+scaled_features = scaler.fit_transform(features)
+
+# Tentukan jumlah klaster
+K = 2
+kmeans = KMeans(n_clusters=K, random_state=42, n_init=10)
+
+# Fit model
+kmeans.fit(scaled_features)
+
+# Tambahkan hasil kluster ke DataFrame
+df['cluster'] = kmeans.labels_
+
+# Tampilkan hasil
+print("Jumlah iterasi:", kmeans.n_iter_)
+print(df.head())
+
+# Hitung inertia
+print("Inertia (total within-cluster sum of squares):", kmeans.inertia_)
+
+# Hitung silhouette score
+sil_score = silhouette_score(scaled_features, kmeans.labels_)
+print("Silhouette Score:", sil_score)
+
+# Visualisasi menggunakan dua fitur pertama (misalnya: sepal_length dan sepal_width)
+plt.figure(figsize=(8, 6))
+for cluster_id in range(K):
+    cluster_points = scaled_features[df['cluster'] == cluster_id]
+    plt.scatter(cluster_points[:, 0], cluster_points[:, 1], label=f'Cluster {cluster_id}')
+
+# Centroid (dalam bentuk yang sudah diskalakan)
+plt.scatter(kmeans.cluster_centers_[:, 0], kmeans.cluster_centers_[:, 1],
+            s=200, c='black', marker='X', label='Centroids')
+
+plt.xlabel('Sepal Length')
+plt.ylabel('Sepal Width')
+plt.title(f'KMeans Clustering with K={K}')
+plt.legend()
+plt.grid(True)
+plt.tight_layout()
+plt.show()
+
+------------------
+
+
+[0;31m---------------------------------------------------------------------------[0m
+[0;31mNameError[0m                                 Traceback (most recent call last)
+Cell [0;32mIn[2], line 7[0m
+[1;32m      4[0m [38;5;28;01mimport[39;00m [38;5;21;01mmatplotlib[39;00m[38;5;21;01m.[39;00m[38;5;21;01mpyplot[39;00m [38;5;28;01mas[39;00m [38;5;21;01mplt[39;00m
+[1;32m      6[0m [38;5;66;03m# Ambil fitur[39;00m
+[0;32m----> 7[0m features [38;5;241m=[39m [43mdf[49m[[[38;5;124m'[39m[38;5;124msepal_length[39m[38;5;124m'[39m, [38;5;124m'[39m[38;5;124msepal_width[39m[38;5;124m'[39m, [38;5;124m'[39m[38;5;124mpetal_length[39m[38;5;124m'[39m, [38;5;124m'[39m[38;5;124mpetal_width[39m[38;5;124m'[39m]]
+[1;32m      9[0m [38;5;66;03m# Standarisasi[39;00m
+[1;32m     10[0m scaler [38;5;241m=[39m StandardScaler()
+
+[0;31mNameError[0m: name 'df' is not defined
+
