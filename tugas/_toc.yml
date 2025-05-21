@@ -6,3 +6,5 @@ root: intro
 chapters:
 - file: data_understanding
 - file: naive_bayes
+- file: uts
+- file: clustering
